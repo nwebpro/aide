@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Button from '../../Components/Button/Button';
 import { AuthContext } from '../../Context/AuthProvider';
@@ -10,13 +10,15 @@ const Login = () => {
     const { userLogin } = useContext(AuthContext)
     const [loginError, setLoginError] = useState('')
     const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || '/dashboard'
 
     const handleUserLogin = data => {
         setLoginError('')
         userLogin(data.email, data.password)
         .then(result => {
+            navigate(from, { replace: true })
             toast.success('User Login Successfully!', { autoClose: 400 })
-            navigate('/dashboard')
         })
         .catch(error => {
             setLoginError(error.message)
