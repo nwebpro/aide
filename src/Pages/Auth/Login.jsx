@@ -1,27 +1,39 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Button from '../../Components/Button/Button';
+import { AuthContext } from '../../Context/AuthProvider';
 
 const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const [registerError, setRegisterError] = useState('')
+    const { userLogin } = useContext(AuthContext)
+    const [loginError, setLoginError] = useState('')
+    const navigate = useNavigate()
 
-    
+    const handleUserLogin = data => {
+        setLoginError('')
+        userLogin(data.email, data.password)
+        .then(result => {
+            toast.success('User Login Successfully!', { autoClose: 400 })
+            navigate('/dashboard')
+        })
+        .catch(error => {
+            setLoginError(error.message)
+        })
+    }
+
     return (
         <>
-            <section className="py-20 bg-theme-secondary">
+            <section className="py-20 bg-theme-secondary grid place-items-center h-screen">
                 <div className="container mx-auto px-[21px]">
                     <div className="-mx-4 flex flex-wrap">
                         <div className="w-full px-4">
-                            <div className="relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white shadow-box-shadow py-16 px-10 text-center sm:px-12 md:px-[60px]" data-aos='zoom-in' data-aos-duration='1000'>
+                            <div className="relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white shadow-box-shadow py-16 px-10 text-center sm:px-12 md:px-[60px]">
                                 <div className="mb-10 text-center md:mb-16">
-                                    <h2 className='text-4xl font-bold'>Sign Up</h2>
+                                    <h2 className='text-4xl font-bold'>Login</h2>
                                 </div>
-                                <form>
-                                    <div className="mb-6">
-                                        <input type="text" {...register("name", { required: true, minLength: { value: 4, message: 'Name must be 4 character or longer' } })} placeholder="Name" className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-theme-2nd focus-visible:shadow-none" />
-                                        {errors.name && <p className='text-red-600 text-xs text-left' role="alert">{errors.name?.message}</p>}
-                                    </div>
+                                <form onSubmit={handleSubmit(handleUserLogin)}>
                                     <div className="mb-6">
                                         <input type="email" {...register("email", {required: true})} placeholder="Email" className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-theme-2nd focus-visible:shadow-none" />
                                         {errors.email && <p className='text-red-600 text-xs text-left' role="alert">{errors.email?.message}</p>}
@@ -35,9 +47,9 @@ const Login = () => {
                                         {errors.password && <p className='text-red-600 text-xs text-left' role="alert">{errors.password?.message}</p>}
                                     </div>
                                     <div className="mb-10">
-                                        <Button classes={'w-full block py-3'} btnText={'Sign Up' } />
+                                        <Button classes={'w-full block py-3'} btnText={'Login' } />
                                     </div>
-                                    {registerError && <p className='text-red-600 text-sm text-center mb-5' role="alert">{ registerError }</p>}
+                                    {loginError && <p className='text-red-600 text-sm text-center mb-5' role="alert">{ loginError }</p>}
                                 </form>
                                 <div>
                                     <span className="absolute top-1 right-1">
