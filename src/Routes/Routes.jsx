@@ -3,6 +3,7 @@ import DashboardLayout from "../Layout/DashboardLayout";
 import Frontend from "../Layout/Frontend";
 import Login from "../Pages/Auth/Login";
 import Dashboard from "../Pages/Dashboard/Dashboard/Dashboard";
+import ImageUpload from "../Pages/Dashboard/ImageUpload/ImageUpload";
 import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
                 path: '/dashboard',
                 element: <Dashboard />
             },
+            {
+                path: '/dashboard/image-upload',
+                element: <ImageUpload />
+            }
         ]
     }
 ])
