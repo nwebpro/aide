@@ -38,7 +38,7 @@ const data = {
 const DoughnutChart = () => {
     return (
         <>
-            <div className='bg-theme-secondary flex flex-col p-5'>
+            <div className='bg-white rounded-md shadow-shadow flex flex-col p-5'>
                 <h2 className='text-lg mb-3 font-semibold'>Doughnut Chart</h2>
                 <Doughnut data={data} />
             </div>

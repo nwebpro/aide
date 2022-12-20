@@ -12,7 +12,7 @@ const Login = () => {
     const [loginError, setLoginError] = useState('')
     const navigate = useNavigate()
     const location = useLocation()
-    const from = location.state?.from?.pathname || '/dashboard'
+    const from = location.state?.from?.pathname || '/dashboard/users'
 
     const handleUserLogin = data => {
         setLoginError('')
