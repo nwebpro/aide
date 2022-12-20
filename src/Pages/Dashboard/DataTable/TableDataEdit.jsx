@@ -58,7 +58,7 @@ const TableDataEdit = () => {
     }
 
     return (
-        <div>
+        <div className='bg-white py-5 px-5 rounded shadow-shadow'>
             <form onSubmit={ handleSubmit(handleUpdateTableData) }>
                 <div className='grid grid-cols-1 md:grid-cols-4 gap-2'>
                     <div className="mb-2">
