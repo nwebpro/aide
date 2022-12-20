@@ -2,10 +2,14 @@ import { createBrowserRouter } from "react-router-dom";
 import DashboardLayout from "../Layout/DashboardLayout";
 import Frontend from "../Layout/Frontend";
 import Login from "../Pages/Auth/Login";
+import Chart from "../Pages/Dashboard/Chart/Chart";
 import Dashboard from "../Pages/Dashboard/Dashboard/Dashboard";
 import DataTable from "../Pages/Dashboard/DataTable/DataTable";
 import TableDataEdit from "../Pages/Dashboard/DataTable/TableDataEdit";
 import ImageUpload from "../Pages/Dashboard/ImageUpload/ImageUpload";
+import AddProduct from "../Pages/Dashboard/Product/AddProduct";
+import AddUser from "../Pages/Dashboard/User/AddUser";
+import AllUser from "../Pages/Dashboard/User/AllUser";
 import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -45,6 +49,22 @@ export const router = createBrowserRouter([
                 path: '/dashboard/datatable/edit/:tableDataId',
                 element: <TableDataEdit />,
                 loader: ({params}) => fetch(`${ process.env.REACT_APP_API_URL }/tableData/${ params.tableDataId } }`)
+            },
+            {
+                path: '/dashboard/all-user',
+                element: <AllUser />
+            },
+            {
+                path: '/dashboard/add/user',
+                element: <AddUser />
+            },
+            {
+                path: '/dashboard/chart',
+                element: <Chart />
+            },
+            {
+                path: '/dashboard/add/product',
+                element: <AddProduct />
             }
         ]
     }

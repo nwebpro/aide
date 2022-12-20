@@ -3,7 +3,7 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 
 const DashboardTopHeader = () => {
     return (
-        <header className='bg-white px-2 md:px-10 py-4 sticky top-0 z-40'>
+        <header className='px-2 md:px-10 py-4'>
             <div className='flex justify-between items-center'>
                 <fieldset className="w-full space-y-1 text-gray-100">
                     <label htmlFor="Search" className="hidden">Search</label>

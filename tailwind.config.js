@@ -12,13 +12,14 @@ module.exports = {
     },
     extend: {
       colors: {
-        'theme-primary': '#3BB4A5',
-        'theme-secondary': '#F2F4F5',
-        'theme-text': '#303030',
-        'theme-body': '#636a6f',
+        'theme-primary': '#9155FD',
+        'theme-secondary': '#F4F5FA',
+        'theme-text': 'rgba(58, 53, 65, 0.87)',
+        'theme-body': 'rgba(58, 53, 65, 0.68)',
       },
       boxShadow: {
         'shadow': '0 4px 80px rgba(0, 0, 0, 0.1)',
+        'btn-shadow': '0px 4px 8px -4px rgba(58, 53, 65, 0.42)',
       },
     },
   },
