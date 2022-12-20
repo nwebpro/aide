@@ -8,6 +8,7 @@ import DataTable from "../Pages/Dashboard/DataTable/DataTable";
 import TableDataEdit from "../Pages/Dashboard/DataTable/TableDataEdit";
 import ImageUpload from "../Pages/Dashboard/ImageUpload/ImageUpload";
 import AddProduct from "../Pages/Dashboard/Product/AddProduct";
+import AllProduct from "../Pages/Dashboard/Product/AllProduct";
 import AddUser from "../Pages/Dashboard/User/AddUser";
 import AllUser from "../Pages/Dashboard/User/AllUser";
 import PrivateRoute from "./PrivateRoute";
@@ -51,7 +52,7 @@ export const router = createBrowserRouter([
                 loader: ({params}) => fetch(`${ process.env.REACT_APP_API_URL }/tableData/${ params.tableDataId } }`)
             },
             {
-                path: '/dashboard/all-user',
+                path: '/dashboard/users',
                 element: <AllUser />
             },
             {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard/chart',
                 element: <Chart />
+            },
+            {
+                path: '/dashboard/products',
+                element: <AllProduct />
             },
             {
                 path: '/dashboard/add/product',

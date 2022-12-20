@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Button from '../../../Components/Button/Button';
 
 const AddProduct = () => {
@@ -14,12 +15,47 @@ const AddProduct = () => {
         setFile(URL.createObjectURL(e.target.files[0]));
     }
 
+    const handleAddProduct = data => {
+        const image = data.image[0]
+        const formData = new FormData()
+        formData.append('image', image)
+        const url = `https://api.imgbb.com/1/upload?key=${ imageUploadApiKey }`
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(imgData => {
+            if(imgData.success) {
+                const addUser = {
+                    name: data.name,
+                    price: data.price,
+                    image: imgData.data.url
+                }
+
+                // Save doctor information to tha database
+                fetch(`${ process.env.REACT_APP_API_URL }/add/product`, {
+                    method: "POST",
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(addUser)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    toast.success(data.message, { autoClose: 400 })
+                    navigate('/dashboard/products')
+                })
+            }
+        })
+    }
+
 
     return (
         <section>
             <h2 className='text-[34px] leading-[42px] font-medium text-theme-primary mb-6'>Add Product</h2>
             <div className='bg-white p-10 w-full md:w-2/4 rounded'>
-                <form>
+                <form onSubmit={ handleSubmit(handleAddProduct) }>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
                         <div className="mb-2">
                             <label  className="block text-sm font-medium text-theme-text mb-1">Product Name</label>
@@ -39,7 +75,7 @@ const AddProduct = () => {
                                     <div className="flex flex-col items-center justify-center pt-7">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-gray-400 group-hover:text-gray-600"
                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                         </svg>
                                         <p className="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">

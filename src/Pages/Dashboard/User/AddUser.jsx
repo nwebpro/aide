@@ -47,7 +47,7 @@ const AddUser = () => {
                 .then(res => res.json())
                 .then(data => {
                     toast.success(data.message, { autoClose: 400 })
-                    navigate('/dashboard/all-user')
+                    navigate('/dashboard/users')
                 })
             }
         })

@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, ScrollRestoration, useNavigate } from 'react-rou
 import { toast } from 'react-toastify';
 import { AuthContext } from '../Context/AuthProvider';
 import DashboardTopHeader from '../Pages/Dashboard/DashboardTopHeader/DashboardTopHeader';
-import { MdDashboard, MdOutlineCloudUpload } from 'react-icons/md'
+import { MdDashboard, MdOutlineAddToPhotos, MdOutlineCloudUpload } from 'react-icons/md'
 import { FiLogOut } from 'react-icons/fi'
 import { SlUser } from 'react-icons/sl'
 import { AiOutlineBarChart, AiOutlineFileAdd } from 'react-icons/ai';
@@ -42,7 +42,7 @@ const DashboardLayout = () => {
                                 <ul>
                                     <li>
                                         <NavLink 
-                                            to="/dashboard/all-user"
+                                            to="/dashboard/users"
                                             className={({ isActive }) =>
                                             isActive
                                                 ? 'flex items-center py-2 md:py-3 px-5 text-sm md:text-base tracking-wide bg-[#1F2937] text-theme-secondary transition-colors duration-200'
@@ -50,7 +50,7 @@ const DashboardLayout = () => {
                                             }
                                         >
                                             <HiOutlineUserGroup className='text-lg md:text-xl' />
-                                            <span>All User</span>
+                                            <span>All Users</span>
                                         </NavLink>
                                     </li>
                                     <li>
@@ -64,6 +64,19 @@ const DashboardLayout = () => {
                                         >
                                             <SlUser className='text-lg md:text-xl' />
                                             <span>Add User</span>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink 
+                                            to="/dashboard/products"
+                                            className={({ isActive }) =>
+                                            isActive
+                                                ? 'flex items-center py-2 md:py-3 px-5 text-sm md:text-base tracking-wide bg-[#1F2937] text-theme-secondary transition-colors duration-200'
+                                                : 'flex items-center py-2 md:py-3 px-5 text-sm md:text-base tracking-wide text-gray-400 hover:text-gray-200 transition hover:bg-gray-800'
+                                            }
+                                        >
+                                            <MdOutlineAddToPhotos className='text-lg md:text-xl' />
+                                            <span>All Products</span>
                                         </NavLink>
                                     </li>
                                     <li>
