@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Button from '../../Components/Button/Button';
 import { AuthContext } from '../../Context/AuthProvider';
+import logo from '../../assets/images/aideLogo.png'
 
 const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
@@ -33,6 +34,7 @@ const Login = () => {
                         <div className="w-full px-4">
                             <div className="relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white shadow-box-shadow py-16 px-10 text-center sm:px-12 md:px-[60px]">
                                 <div className="mb-10 text-center md:mb-16">
+                                    <img src={ logo } className='w-20 mx-auto mb-5' alt="Aide Logo" />
                                     <h2 className='text-4xl font-bold'>Login</h2>
                                 </div>
                                 <form onSubmit={handleSubmit(handleUserLogin)}>

@@ -109,7 +109,7 @@ const DataTable = () => {
 
     return (
         <div className='bg-theme-secondary py-5 px-2 shadow-shadow'>
-            <div className='flex gap-5'>
+            <div className='flex gap-2 md:gap-5 items-center mb-5'>
                 <CSVLink data={ allData } filename={'aide-datatable.csv'}>
                     <div className='bg-theme-primary px-5 py-2 text-white text-2xl rounded'>
                         <FaFileCsv />
@@ -118,7 +118,7 @@ const DataTable = () => {
                 <div onClick={generatePDF} className='bg-theme-primary px-5 py-2 text-white text-2xl rounded cursor-pointer'>
                     <ImFilePdf />
                 </div>
-                <div className='bg-theme-primary px-5 py-2 text-white text-lg rounded cursor-pointer'>
+                <div className='bg-theme-primary px-5 py-2 text-white text-sm md:text-lg rounded cursor-pointer'>
                     <div className='flex'>
                         <DownloadExcel
                             data={ allData }
