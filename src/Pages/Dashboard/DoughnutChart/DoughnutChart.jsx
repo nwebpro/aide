@@ -37,12 +37,12 @@ const data = {
 
 const DoughnutChart = () => {
     return (
-        <div className='grid grid-cols-12 gap-6'>
-            <div className='bg-theme-secondary flex flex-col col-span-full sm:col-span-6 xl:col-span-6 p-5'>
+        <>
+            <div className='bg-theme-secondary flex flex-col p-5'>
                 <h2 className='text-lg mb-3 font-semibold'>Doughnut Chart</h2>
                 <Doughnut data={data} />
             </div>
-        </div>
+        </>
         
     );
 };

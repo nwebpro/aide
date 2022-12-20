@@ -70,7 +70,7 @@ const DashboardLayout = () => {
                                     </li>
                                     <li>
                                         <NavLink 
-                                            to="/dashboard/table"
+                                            to="/dashboard/datatable"
                                             className={({ isActive }) =>
                                             isActive
                                                 ? 'flex items-center py-2 md:py-3 px-5 text-sm md:text-base tracking-wide bg-[#1F2937] text-theme-secondary transition-colors duration-200'
@@ -78,7 +78,7 @@ const DashboardLayout = () => {
                                             }
                                         >
                                             <BsTable className='text-lg md:text-xl' />
-                                            <span>Table</span>
+                                            <span>Data Table</span>
                                         </NavLink>
                                     </li>
                                 </ul>
