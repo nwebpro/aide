@@ -3,8 +3,28 @@ import { TbExternalLink } from 'react-icons/tb'
 import { Link } from 'react-router-dom';
 import { BiDotsVerticalRounded } from 'react-icons/bi'
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
+import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner';
+import { useQuery } from '@tanstack/react-query';
+import adminIcon from '../../../assets/images/admin.png'
+import editorIcon from '../../../assets/images/editor.png'
+import authorIcon from '../../../assets/images/author.png'
 
 const AllUser = () => {
+    const { data:users = [], isLoading } = useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const res = await fetch(`${ process.env.REACT_APP_API_URL }/users`)
+            const data = await res.json()
+            return data
+        }
+    })
+    
+    const allUsers = users.data
+
+    if(isLoading) {
+        return <LoadingSpinner />
+    }
+    
     return (
         <section>
             <h2 className='text-[34px] leading-[42px] font-medium text-theme-primary mb-6'>All Users</h2>
@@ -40,7 +60,7 @@ const AllUser = () => {
                 </div>
                 <div className="border-gray-200 w-full rounded bg-white overflow-x-auto">
                     <table className="w-full leading-normal">
-                        <thead>
+                        <thead className='border border-[#F9FAFC] border-b-0'>
                             <tr>
                                 <th scope="col"
                                     className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
@@ -73,66 +93,56 @@ const AllUser = () => {
                             </tr>
                         </thead>
                         <tbody className='border border-gray-200'>
-                            <tr className="hover:bg-gray-100 hover:cursor-pointer border-b border-gray-200">
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>1</span>
-                                </td>
-                                <td className="py-4 px-6 text-theme-text text-sm ">
-                                    <div className="flex items-center">
-                                        <div className="flex-shrink-0 h-10 w-10">
-                                            <img src="https://faces.design/faces/m/m11.png" alt="" className="w-full h-full rounded-full" />
-                                        </div>
-                                        <div className="ml-3">
-                                            <p className="text-gray-900 whitespace-no-wrap">Héctor Avila</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>hector@kbis.com.mx</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>Admin</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>Team</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>Active</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
-                                </td>
-                            </tr>
-                            <tr className="hover:bg-gray-100 hover:cursor-pointer border-b border-gray-200">
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>1</span>
-                                </td>
-                                <td className="py-4 px-6 text-theme-text text-sm ">
-                                    <div className="flex items-center">
-                                        <div className="flex-shrink-0 h-10 w-10">
-                                            <img src="https://faces.design/faces/m/m11.png" alt="" className="w-full h-full rounded-full" />
-                                        </div>
-                                        <div className="ml-3">
-                                            <p className="text-gray-900 whitespace-no-wrap">Héctor Avila</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>hector@kbis.com.mx</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>Admin</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>Team</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <span>Active</span>
-                                </td>
-                                <td className="py-4 px-6 text-gray-900 text-sm">
-                                    <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
-                                </td>
-                            </tr>
+                            {
+                                allUsers?.map((user, i) => (
+                                    <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200">
+                                        <td className="py-4 px-6 text-gray-900 text-sm">
+                                            <span>{ i + 1 }</span>
+                                        </td>
+                                        <td className="py-4 px-6 text-theme-text text-sm ">
+                                            <div className="flex items-center">
+                                                <div className="flex-shrink-0 h-10 w-10">
+                                                    <img src={user.image} alt="" className="w-full h-full rounded-full" />
+                                                </div>
+                                                <div className="ml-3">
+                                                    <p className="text-gray-900 whitespace-no-wrap">{ user.name }</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="py-4 px-6 text-gray-900 text-sm">
+                                            <span>{ user.email }</span>
+                                        </td>
+                                        <td className="py-4 px-6 text-gray-900 text-sm capitalize">
+                                            {
+                                                user.role === 'admin' ?
+                                                <span className='flex gap-2 items-center'>
+                                                    <img src={adminIcon} alt="" />
+                                                    { user.role }
+                                                </span>
+                                                : user.role === 'editor' ?
+                                                <span className='flex gap-2 items-center'>
+                                                    <img src={editorIcon} alt="" />
+                                                    { user.role }
+                                                </span>
+                                                :
+                                                <span className='flex gap-2 items-center'>
+                                                    <img src={authorIcon} alt="" />
+                                                    { user.role }
+                                                </span>
+                                            }
+                                        </td>
+                                        <td className={`py-4 px-6 text-gray-900 text-sm capitalize`}>
+                                            <span>{ user.plan }</span>
+                                        </td>
+                                        <td className="py-4 px-6 text-gray-900 text-sm capitalize">
+                                            <span className={`${user.status === 'pending' ? 'bg-[#FDEDE1] text-[#FFB400]' : user.status === 'active' ? 'bg-[#EAF5EA] text-[#56CA00]' : 'bg-[#F1F1F2] text-[#8A8D93]'} py-1 px-[10px] rounded-2xl text-[13px] tracking-[0.16px]`}>{ user.status }</span>
+                                        </td>
+                                        <td className="py-4 px-6 text-gray-900 text-sm">
+                                            <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
+                                        </td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
                 </div>
