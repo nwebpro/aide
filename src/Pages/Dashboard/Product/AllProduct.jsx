@@ -1,15 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { TbExternalLink } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 import ReactToPrint from 'react-to-print';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../../../Context/AuthProvider';
 import ConfirmationModal from '../../Shared/ConfirmationModal/ConfirmationModal';
 import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner';
 
 const AllProduct = () => {
+    const { handleExcelExport } = useContext(AuthContext)
     const [deletedProduct, setDeletedProduct] = useState(null)
     const productComponentRef = useRef()
     const { data:products = [], isLoading, refetch } = useQuery({
@@ -53,7 +55,7 @@ const AllProduct = () => {
                             <TbExternalLink />
                             Pdf
                         </div>
-                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
+                        <div onClick={() => handleExcelExport(allProducts, 'All Products', 'AllProducts.xlsx')} className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
                             <TbExternalLink />
                             Excel
                         </div>

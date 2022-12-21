@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { TbExternalLink } from 'react-icons/tb'
 import { Link } from 'react-router-dom';
 import { BiDotsVerticalRounded } from 'react-icons/bi'
@@ -11,8 +11,10 @@ import authorIcon from '../../../assets/images/author.png'
 import ReactToPrint from 'react-to-print';
 import ConfirmationModal from '../../Shared/ConfirmationModal/ConfirmationModal';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../../../Context/AuthProvider';
 
 const AllUser = () => {
+    const { handleExcelExport } = useContext(AuthContext)
     const [deletedUser, setDeletedUser] = useState(null)
     const userComponentRef = useRef()
     const { data:users = [], isLoading, refetch } = useQuery({
@@ -56,7 +58,7 @@ const AllUser = () => {
                             <TbExternalLink />
                             Pdf
                         </div>
-                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
+                        <div onClick={() => handleExcelExport(allUsers, 'All Users', 'AllUsers.xlsx')} className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
                             <TbExternalLink />
                             Excel
                         </div>

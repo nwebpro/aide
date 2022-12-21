@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import app from '../Firebase/firebase.init';
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
+import * as XLSX from 'xlsx'
 
 export const AuthContext = createContext()
 const auth = getAuth(app)
@@ -41,6 +42,13 @@ const AuthProvider = ({ children }) => {
         }
     }, [])
 
+    const handleExcelExport = (data, sheetName, filename) => {
+        let wb = XLSX.utils.book_new(),
+        ws = XLSX.utils.json_to_sheet(data);
+        XLSX.utils.book_append_sheet(wb, ws, sheetName);
+        XLSX.writeFile(wb, filename)
+    }
+
     const authInfo = {
         user, 
         loading,
@@ -50,6 +58,7 @@ const AuthProvider = ({ children }) => {
         updateUserInfo,
         userLogout,
         userLogin,
+        handleExcelExport
     }
     return (
         <AuthContext.Provider value={ authInfo }>
