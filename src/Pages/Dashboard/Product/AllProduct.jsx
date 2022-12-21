@@ -116,7 +116,7 @@ const AllProduct = () => {
                         <tbody className='border border-gray-200'>
                             {
                                 allProducts?.map((product, i) => (
-                                    <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200">
+                                    <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200" key={i}>
                                         <td className="py-4 px-6 text-gray-900 text-sm">
                                             <span>{ i + 1 }</span>
                                         </td>
@@ -143,7 +143,7 @@ const AllProduct = () => {
                                                         <label htmlFor="confirmationModal" onClick={() => setDeletedProduct(product)}>
                                                             <AiOutlineDelete className='cursor-pointer' />
                                                         </label>
-                                                        <Link to=''>
+                                                        <Link to={`/dashboard/product/edit/${ product._id }`}>
                                                             <AiOutlineEdit className='cursor-pointer' />
                                                         </Link>
                                                     </div>

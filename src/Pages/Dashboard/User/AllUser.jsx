@@ -127,7 +127,7 @@ const AllUser = () => {
                         <tbody className='border border-gray-200'>
                             {
                                 allUsers?.map((user, i) => (
-                                    <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200">
+                                    <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200" key={i}>
                                         <td className="py-4 px-6 text-gray-900 text-sm">
                                             <span>{ i + 1 }</span>
                                         </td>
@@ -179,7 +179,7 @@ const AllUser = () => {
                                                         <label htmlFor="confirmationModal" onClick={() => setDeletedUser(user)}>
                                                             <AiOutlineDelete className='cursor-pointer' />
                                                         </label>
-                                                        <Link to=''>
+                                                        <Link to={`/dashboard/user/edit/${ user._id }`}>
                                                             <AiOutlineEdit className='cursor-pointer' />
                                                         </Link>
                                                     </div>

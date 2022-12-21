@@ -9,8 +9,11 @@ import TableDataEdit from "../Pages/Dashboard/DataTable/TableDataEdit";
 import ImageUpload from "../Pages/Dashboard/ImageUpload/ImageUpload";
 import AddProduct from "../Pages/Dashboard/Product/AddProduct";
 import AllProduct from "../Pages/Dashboard/Product/AllProduct";
+import EditProduct from "../Pages/Dashboard/Product/EditProduct";
 import AddUser from "../Pages/Dashboard/User/AddUser";
 import AllUser from "../Pages/Dashboard/User/AllUser";
+import EditUser from "../Pages/Dashboard/User/EditUser";
+import Home from "../Pages/Home/Home";
 import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -21,6 +24,10 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: '/',
+                element: <Home />
+            },
+            {
+                path: '/login',
                 element: <Login />
             }
         ]
@@ -43,21 +50,17 @@ export const router = createBrowserRouter([
                 element: <ImageUpload />
             },
             {
-                path: '/dashboard/datatable',
-                element: <DataTable />
-            },
-            {
-                path: '/dashboard/datatable/edit/:tableDataId',
-                element: <TableDataEdit />,
-                loader: ({params}) => fetch(`${ process.env.REACT_APP_API_URL }/tableData/${ params.tableDataId } }`)
-            },
-            {
                 path: '/dashboard/users',
                 element: <AllUser />
             },
             {
                 path: '/dashboard/add/user',
                 element: <AddUser />
+            },
+            {
+                path: '/dashboard/user/edit/:userId',
+                element: <EditUser />,
+                loader: ({ params }) => fetch(`${ process.env.REACT_APP_API_URL }/user/edit/${ params.userId } }`)
             },
             {
                 path: '/dashboard/chart',
@@ -70,6 +73,11 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard/add/product',
                 element: <AddProduct />
+            },
+            {
+                path: '/dashboard/product/edit/:productId',
+                element: <EditProduct />,
+                loader: ({ params }) => fetch(`${ process.env.REACT_APP_API_URL }/product/edit/${ params.productId } }`)
             }
         ]
     }

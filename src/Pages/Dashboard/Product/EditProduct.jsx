@@ -1,69 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Button from '../../../Components/Button/Button';
 
-const AddProduct = () => {
+const EditProduct = () => {
+    const { productId } = useParams()
     const [file, setFile] = useState();
-    const { register, handleSubmit } = useForm();
+    const [productUpdate, setProductUpdate] = useState([])
+    const { register, handleSubmit } = useForm()
     const navigate = useNavigate()
     const imageUploadApiKey = process.env.REACT_APP_IMGBB_API_KEY
+
+    useEffect(() => {
+        fetch(`${ process.env.REACT_APP_API_URL }/product/edit/${ productId }`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    setProductUpdate(data.data);
+                } else {
+                    toast.error(data.error, { autoClose: 400 });
+                }
+            })
+            .catch((err) => toast.error(err.message, { autoClose: 400 }));
+    }, [productId]);
 
     function handleChange(e) {
         console.log(e.target.files);
         setFile(URL.createObjectURL(e.target.files[0]));
     }
 
-    const handleAddProduct = data => {
-        const image = data.image[0]
-        const formData = new FormData()
-        formData.append('image', image)
-        const url = `https://api.imgbb.com/1/upload?key=${ imageUploadApiKey }`
-        fetch(url, {
-            method: "POST",
-            body: formData
-        })
-        .then(res => res.json())
-        .then(imgData => {
-            if(imgData.success) {
-                const addUser = {
-                    name: data.name,
-                    price: data.price,
-                    image: imgData.data.url
-                }
-
-                // Save doctor information to tha database
-                fetch(`${ process.env.REACT_APP_API_URL }/add/product`, {
-                    method: "POST",
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify(addUser)
-                })
-                .then(res => res.json())
-                .then(data => {
-                    toast.success(data.message, { autoClose: 400 })
-                    navigate('/dashboard/products')
-                })
-            }
-        })
+    const handleUpdateProduct = data => {
+        
     }
-
 
     return (
         <section>
-            <h2 className='text-[34px] leading-[42px] font-medium text-theme-primary mb-6'>Add Product</h2>
+            <h2 className='text-[34px] leading-[42px] font-medium text-theme-primary mb-6'>Update Product</h2>
             <div className='bg-white p-10 w-full md:w-2/4 rounded'>
-                <form onSubmit={ handleSubmit(handleAddProduct) }>
+                <form onSubmit={ handleSubmit(handleUpdateProduct) }>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
                         <div className="mb-2">
                             <label  className="block text-sm font-medium text-theme-text mb-1">Product Name</label>
-                            <input type="text" {...register("name", { required: true })} placeholder='Product Name' className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-theme-2nd focus-visible:shadow-none" />
+                            <input type="text" {...register("name")} defaultValue={productUpdate.name} placeholder='Product Name' className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-theme-2nd focus-visible:shadow-none" />
                         </div>
                         <div className="mb-2">
                             <label  className="block text-sm font-medium text-theme-text mb-1">Product Price</label>
-                            <input type="text" {...register("price", { required: true })} placeholder='Product Price' className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-theme-2nd focus-visible:shadow-none" />
+                            <input type="text" {...register("price")} defaultValue={productUpdate.price} placeholder='Product Price' className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-theme-2nd focus-visible:shadow-none" />
                         </div>
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
@@ -81,18 +64,21 @@ const AddProduct = () => {
                                         <p className="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
                                             Attach a file</p>
                                     </div>
-                                    <input type="file" {...register("image", {required: true})} className="opacity-0" onChange={ handleChange } />
+                                    <input type="file" {...register("image")} className="opacity-0" onChange={ handleChange } />
                                 </label>
                             </div>
                         </div>
                         <div className='grid place-content-center'>
-                            {
-                                file && <img src={ file } alt='' className='w-20' />
-                            }
+                            <div className='flex flex-col md:flex-row gap-3'>
+                                <img src={productUpdate.image} alt="" className='w-16' />
+                                {
+                                    file && <img src={ file } alt='' className='w-16' />
+                                }
+                            </div>
                         </div>
                     </div>
                     <div className="flex justify-end p-2">
-                        <Button classes={'py-3 px-5'} btnText={'Add Product' } />
+                        <Button classes={'py-3 px-5'} btnText={'Update Product' } />
                     </div>
                 </form>
             </div>
@@ -100,4 +86,4 @@ const AddProduct = () => {
     );
 };
 
-export default AddProduct;
+export default EditProduct;

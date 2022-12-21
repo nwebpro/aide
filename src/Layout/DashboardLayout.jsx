@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { Link, NavLink, Outlet, ScrollRestoration, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, ScrollRestoration, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../Context/AuthProvider';
 import DashboardTopHeader from '../Pages/Dashboard/DashboardTopHeader/DashboardTopHeader';
-import { MdDashboard, MdOutlineAddToPhotos, MdOutlineCloudUpload } from 'react-icons/md'
+import { MdOutlineAddToPhotos } from 'react-icons/md'
 import { FiLogOut } from 'react-icons/fi'
 import { SlUser } from 'react-icons/sl'
-import { AiOutlineBarChart, AiOutlineFileAdd } from 'react-icons/ai';
+import { AiOutlineBarChart, AiOutlineFileAdd, AiOutlineHome } from 'react-icons/ai';
 import { HiOutlineUserGroup } from 'react-icons/hi';
 
 const DashboardLayout = () => {
@@ -40,6 +40,19 @@ const DashboardLayout = () => {
                         <div className={`flex flex-col justify-between flex-1 mt-2 md:mt-6`}>
                             <nav>
                                 <ul>
+                                    <li>
+                                        <NavLink 
+                                            to="/"
+                                            className={({ isActive }) =>
+                                            isActive
+                                                ? 'flex items-center py-2 md:py-3 px-5 text-sm md:text-base tracking-wide bg-[#1F2937] text-theme-secondary transition-colors duration-200'
+                                                : 'flex items-center py-2 md:py-3 px-5 text-sm md:text-base tracking-wide text-gray-400 hover:text-gray-200 transition hover:bg-gray-800'
+                                            }
+                                        >
+                                            <AiOutlineHome className='text-lg md:text-xl' />
+                                            <span>Home</span>
+                                        </NavLink>
+                                    </li>
                                     <li>
                                         <NavLink 
                                             to="/dashboard/users"
