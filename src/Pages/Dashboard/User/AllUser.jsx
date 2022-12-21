@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { TbExternalLink } from 'react-icons/tb'
 import { Link } from 'react-router-dom';
 import { BiDotsVerticalRounded } from 'react-icons/bi'
@@ -8,9 +8,14 @@ import { useQuery } from '@tanstack/react-query';
 import adminIcon from '../../../assets/images/admin.png'
 import editorIcon from '../../../assets/images/editor.png'
 import authorIcon from '../../../assets/images/author.png'
+import ReactToPrint from 'react-to-print';
+import ConfirmationModal from '../../Shared/ConfirmationModal/ConfirmationModal';
+import { toast } from 'react-toastify';
 
 const AllUser = () => {
-    const { data:users = [], isLoading } = useQuery({
+    const [deletedUser, setDeletedUser] = useState(null)
+    const userComponentRef = useRef()
+    const { data:users = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await fetch(`${ process.env.REACT_APP_API_URL }/users`)
@@ -24,6 +29,22 @@ const AllUser = () => {
     if(isLoading) {
         return <LoadingSpinner />
     }
+
+    const closeModal = () => {
+        setDeletedUser(null)
+    }
+    const handleUserDelete = userId => {
+        fetch(`${ process.env.REACT_APP_API_URL }/user/${ userId }`, {
+            method: "DELETE"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                toast.success(data.message, { autoClose: 400 })
+                refetch()
+            }
+        })
+    }
     
     return (
         <section>
@@ -31,20 +52,29 @@ const AllUser = () => {
             <div className='bg-white p-5 rounded'>
                 <div className='flex flex-wrap gap-5 md:flex-row justify-between items-center mb-5'>
                     <div className='flex gap-2 md:gap-6 flex-wrap'>
-                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer'>
+                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
                             <TbExternalLink />
                             Pdf
                         </div>
-                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer'>
+                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
                             <TbExternalLink />
                             Excel
                         </div>
-                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer'>
-                            <TbExternalLink />
-                            Print
-                        </div>
+                        <ReactToPrint 
+                            trigger={() => {
+                                return (
+                                    <button className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
+                                        <TbExternalLink />
+                                        Print
+                                    </button>
+                                )
+                            }}
+                            content={() => userComponentRef.current}
+                            documentTitle='All Users'
+                            pageStyle='print'
+                        />
                         <div>
-                        <select className="outline-none border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93]">
+                            <select className="outline-none border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93]">
                                 <option>Show/Hide Column</option>
                                 <option value=''>User</option>
                                 <option value=''>Email</option>
@@ -58,8 +88,8 @@ const AllUser = () => {
                         <Link to='/dashboard/add/user' className='bg-theme-primary py-2 px-5 rounded shadow-btn-shadow text-white uppercase font-medium text-sm leading-6 tracking-[0.4px]'>Add User</Link>
                     </div>
                 </div>
-                <div className="border-gray-200 w-full rounded bg-white overflow-x-auto">
-                    <table className="w-full leading-normal">
+                <div className="border-gray-200 w-full rounded bg-white">
+                    <table className="w-full leading-normal" ref={ userComponentRef }>
                         <thead className='border border-[#F9FAFC] border-b-0'>
                             <tr>
                                 <th scope="col"
@@ -138,7 +168,21 @@ const AllUser = () => {
                                             <span className={`${user.status === 'pending' ? 'bg-[#FDEDE1] text-[#FFB400]' : user.status === 'active' ? 'bg-[#EAF5EA] text-[#56CA00]' : 'bg-[#F1F1F2] text-[#8A8D93]'} py-1 px-[10px] rounded-2xl text-[13px] tracking-[0.16px]`}>{ user.status }</span>
                                         </td>
                                         <td className="py-4 px-6 text-gray-900 text-sm">
-                                            <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
+                                            <div className='dropdown dropdown-end'>
+                                                <label tabIndex={0} className="cursor-pointer flex items-center">
+                                                    <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
+                                                </label>
+                                                <div tabIndex={0} className='dropdown-content p-4 shadow bg-base-100 rounded-box'>
+                                                    <div className='flex gap-3 text-2xl text-theme-primary'>
+                                                        <label htmlFor="confirmationModal" onClick={() => setDeletedUser(user)}>
+                                                            <AiOutlineDelete className='cursor-pointer' />
+                                                        </label>
+                                                        <Link to=''>
+                                                            <AiOutlineEdit className='cursor-pointer' />
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -147,6 +191,17 @@ const AllUser = () => {
                     </table>
                 </div>
             </div>
+            {
+                deletedUser &&
+                <ConfirmationModal 
+                    title={`Are you sure you want to delete?`}
+                    message={`${ deletedUser.name }`}
+                    closeModal={closeModal}
+                    successAction={handleUserDelete}
+                    successButtonName={`Delete`}
+                    modalData={deletedUser}
+                />
+            }
         </section>
     );
 };
