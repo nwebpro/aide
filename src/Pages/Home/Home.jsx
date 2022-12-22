@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import LoadingSpinner from '../Shared/LoadingSpinner/LoadingSpinner';
+import Product from './Product';
 import TopHeader from './TopHeader';
 
 const Home = () => {
+    const [addToCart, setAddToCart] = useState([])
+    const [btnHide, setBtnHide] = useState(true)
     const { data:products = [], isLoading } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
@@ -12,12 +15,28 @@ const Home = () => {
             return data
         }
     })
-    
     const allProducts = products.data
 
     if(isLoading) {
         return <LoadingSpinner />
     }
+
+    const handleAddToCart = selectedProduct => {
+        let newCart = [];
+        const exists = addToCart.find(product => product._id === selectedProduct._id);
+        if(!exists){
+            selectedProduct.quantity = 1;
+            newCart = [...addToCart, selectedProduct];
+        }else{
+            const rest = addToCart.filter(product => product.id !== selectedProduct.id);
+            exists.quantity = exists.quantity + 1;
+            newCart = [...rest, exists];
+        }
+        setAddToCart(newCart)
+    }
+
+    console.log(addToCart)
+    
 
     return (
         <div className='bg-theme-secondary py-20'>
@@ -26,14 +45,7 @@ const Home = () => {
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                     {
                         allProducts?.map(product => (
-                            <div key={product._id} className='bg-white p-5 hover:shadow-shadow transition duration-300 rounded'>
-                                <img src={product.image} alt={product.name} className='w-64 h-64 object-cover mb-5 mx-auto' />
-                                <div>
-                                    <h2 className='text-xl text-theme-text font-semibold mb-3'>{product.name}</h2>
-                                    <p className='text-lg mb-2 font-bold text-theme-primary'>৳ {product.price}</p>
-                                    <button className='bg-theme-primary text-white block text-center w-full py-2 hover:shadow-btn-shadow transition duration-300'>Add To Cart</button>
-                                </div>
-                            </div>
+                            <Product key={product._id} product={product} addToCart={addToCart} handleAddToCart={handleAddToCart} />
                         ))
                     }
                 </div>
