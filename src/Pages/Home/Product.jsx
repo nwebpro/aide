@@ -6,13 +6,13 @@ const Product = ({ product, handleAddToCart, addToCart }) => {
     const exists = addToCart.find(item => item._id === product._id);
     
 
-    const countUp = increment => {
+    const incrementCart = increment => {
         const exists = addToCart.find(p => p._id === increment)
         let productCount = exists.quantity
         exists.quantity = exists.quantity + 1
         setProductCount(productCount)
     }
-    const countDown = decrement => {
+    const decrementCart = decrement => {
         const exists = addToCart.find(p => p._id === decrement)
         let productCount = exists.quantity
         exists.quantity = exists.quantity - 1
@@ -29,8 +29,8 @@ const Product = ({ product, handleAddToCart, addToCart }) => {
                     exists?.quantity >= 1 ?
                     <IncrementDecrement 
                         exists={exists}
-                        countUp={countUp}
-                        countDown={countDown}
+                        incrementCart={incrementCart}
+                        decrementCart={decrementCart}
                      />
                     :
                     <button onClick={() => handleAddToCart(product)} className={`bg-theme-primary text-white block text-center w-full py-2 hover:shadow-btn-shadow transition duration-300`}>Add To Cart</button>

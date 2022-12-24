@@ -16,6 +16,16 @@ import { AuthContext } from '../../../Context/AuthProvider';
 const AllUser = () => {
     const { handleExcelExport } = useContext(AuthContext)
     const [deletedUser, setDeletedUser] = useState(null)
+    const [tableColumnShowHide, setTableColumnShowHide] = useState(false)
+    const [tableColumnShow, setTableColumnShow] = useState({
+        sl: "sl",
+        user: "user",
+        email: "email",
+        plan: "plan",
+        role: "role",
+        status: "status",
+        action: "action"
+    })
     const userComponentRef = useRef()
     const { data:users = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
@@ -47,6 +57,15 @@ const AllUser = () => {
             }
         })
     }
+
+    const tableColumnShowHideHandle = () => {
+        setTableColumnShowHide(!tableColumnShowHide)
+    }
+
+    const tableColumnHandle = data => {
+        setTableColumnShow({ ...tableColumnShow, [data.target.name]: data.target.value })
+    }
+   
     
     return (
         <section>
@@ -75,15 +94,38 @@ const AllUser = () => {
                             documentTitle='All Users'
                             pageStyle='print'
                         />
-                        <div>
-                            <select className="outline-none border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93]">
-                                <option>Show/Hide Column</option>
-                                <option value=''>User</option>
-                                <option value=''>Email</option>
-                                <option value=''>Role</option>
-                                <option value=''>Plan</option>
-                                <option value=''>Status</option>
-                            </select>
+                        <div className="dropdown dropdown-bottom mt-[6px]">
+                            <label tabIndex={0} className="cursor-pointer outline-none border rounded-lg py-[10px] items-center px-5 uppercase text-sm text-[#8A8D93]" onClick={tableColumnShowHideHandle}>Show/Hide Column</label>
+                            <div tabIndex={0} className="dropdown-content menu shadow-shadow bg-base-100 w-52 mt-2">
+                                <label htmlFor="sl" className='flex items-center pl-5 border-b py-1'>
+                                    <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200 mr-2 cursor-pointer' onClick={tableColumnHandle} type="checkbox" name="sl" value={tableColumnShow.sl === "sl" ? "" : "sl"} defaultChecked={tableColumnShow.sl === "sl" ? true : false} />
+                                    Sl
+                                </label>
+                                <label htmlFor="user" className='flex items-center pl-5 border-b py-1'>
+                                    <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200  mr-2 cursor-pointer' onClick= {tableColumnHandle} type="checkbox" name="user" value={tableColumnShow.user === "user" ? "" : "user"} defaultChecked={tableColumnShow.user === "user" ? true : false} />
+                                    User
+                                </label>
+                                <label htmlFor="email" className='flex items-center pl-5 border-b py-1'>
+                                    <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200   mr-2 cursor-pointer' onClick={tableColumnHandle} type="checkbox" name="email" value={tableColumnShow.email === "email" ? "" : "email"} defaultChecked={tableColumnShow.email === "email" ? true : false} />
+                                    Email
+                                </label>
+                                <label htmlFor="plan" className='flex items-center pl-5 border-b py-1'>
+                                    <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200   mr-2 cursor-pointer' onChange={tableColumnHandle} type="checkbox" name="plan" value={tableColumnShow.plan === "plan" ? "" : "plan"} defaultChecked={tableColumnShow.plan === "plan" ? true : false} />
+                                    Plan
+                                </label>
+                                <label htmlFor="role" className='flex items-center pl-5 border-b py-1'>
+                                    <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200   mr-2 cursor-pointer' onChange={tableColumnHandle} type="checkbox" name="role" value={tableColumnShow.role === "role" ? "" : "role"} defaultChecked={tableColumnShow.role === "role" ? true : false} />
+                                    Role
+                                </label>
+                                <label htmlFor="status" className='flex items-center pl-5 border-b py-1'>
+                                    <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200   mr-2 cursor-pointer' onChange={tableColumnHandle} type="checkbox" name="status" value={tableColumnShow.status === "status" ? "" : "status"} defaultChecked={tableColumnShow.status === "status" ? true : false} />
+                                    Status
+                                </label>
+                                <label htmlFor="action" className='flex items-center pl-5 py-1'>
+                                    <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200   mr-2 cursor-pointer' onChange={tableColumnHandle} type="checkbox" name="action" value={tableColumnShow.action === "action" ? "" : "action"} defaultChecked={tableColumnShow.action === "action" ? true : false} />
+                                    Action
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div>
@@ -94,98 +136,141 @@ const AllUser = () => {
                     <table className="w-full leading-normal" ref={ userComponentRef }>
                         <thead className='border border-[#F9FAFC] border-b-0'>
                             <tr>
-                                <th scope="col"
-                                    className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                    Sl
-                                </th>
-                                <th scope="col"
-                                    className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                    User
-                                </th>
-                                <th scope="col"
-                                    className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                    Email
-                                </th>
-                                <th scope="col"
-                                    className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                    Role
-                                </th>
-                                <th scope="col"
-                                    className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                    Plan
-                                </th>
-                                <th scope="col"
-                                    className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                    Status
-                                </th>
-                                <th scope="col"
-                                    className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                    Action
-                                </th>
+                                {
+                                    tableColumnShow.sl === 'sl' &&
+                                    <th scope="col"
+                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                        Sl
+                                    </th>
+                                }
+                                {
+                                    tableColumnShow.user === 'user' &&
+                                    <th scope="col"
+                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                        User
+                                    </th>
+                                }
+                                
+                                {
+                                    tableColumnShow.email === 'email' &&
+                                    <th scope="col"
+                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                        Email
+                                    </th>
+                                }
+                                {
+                                    tableColumnShow.role === 'role' &&
+                                    <th scope="col"
+                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                        Role
+                                    </th>
+                                }
+                                {
+                                    tableColumnShow.plan === 'plan' &&
+                                    <th scope="col"
+                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                        Plan
+                                    </th>
+                                }
+                                {
+                                    tableColumnShow.status === 'status' &&
+                                    <th scope="col"
+                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                        Status
+                                    </th>
+                                }
+                                {
+                                    tableColumnShow.action === 'action' &&
+                                    <th scope="col"
+                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                        Action
+                                    </th>
+                                }
                             </tr>
                         </thead>
                         <tbody className='border border-gray-200'>
                             {
                                 allUsers?.map((user, i) => (
                                     <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200" key={i}>
-                                        <td className="py-4 px-6 text-gray-900 text-sm">
-                                            <span>{ i + 1 }</span>
-                                        </td>
-                                        <td className="py-4 px-6 text-theme-text text-sm ">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 h-10 w-10">
-                                                    <img src={user.image} alt={ user.name } className="w-full h-full rounded-full" />
-                                                </div>
-                                                <div className="ml-3">
-                                                    <p className="text-gray-900 whitespace-no-wrap">{ user.name }</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-4 px-6 text-gray-900 text-sm">
-                                            <span>{ user.email }</span>
-                                        </td>
-                                        <td className="py-4 px-6 text-gray-900 text-sm capitalize">
-                                            {
-                                                user.role === 'admin' ?
-                                                <span className='flex gap-2 items-center'>
-                                                    <img src={adminIcon} alt="" />
-                                                    { user.role }
-                                                </span>
-                                                : user.role === 'editor' ?
-                                                <span className='flex gap-2 items-center'>
-                                                    <img src={editorIcon} alt="" />
-                                                    { user.role }
-                                                </span>
-                                                :
-                                                <span className='flex gap-2 items-center'>
-                                                    <img src={authorIcon} alt="" />
-                                                    { user.role }
-                                                </span>
-                                            }
-                                        </td>
-                                        <td className={`py-4 px-6 text-gray-900 text-sm capitalize`}>
-                                            <span>{ user.plan }</span>
-                                        </td>
-                                        <td className="py-4 px-6 text-gray-900 text-sm capitalize">
-                                            <span className={`${user.status === 'pending' ? 'bg-[#FDEDE1] text-[#FFB400]' : user.status === 'active' ? 'bg-[#EAF5EA] text-[#56CA00]' : 'bg-[#F1F1F2] text-[#8A8D93]'} py-1 px-[10px] rounded-2xl text-[13px] tracking-[0.16px]`}>{ user.status }</span>
-                                        </td>
-                                        <td className="py-4 px-6 text-gray-900 text-sm">
-                                            <div className='dropdown dropdown-end'>
-                                                <label tabIndex={0} className="cursor-pointer flex items-center">
-                                                    <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
-                                                </label>
-                                                <div tabIndex={0} className='dropdown-content p-4 shadow bg-base-100 rounded-box'>
-                                                    <div className='flex gap-3 text-2xl text-theme-primary'>
-                                                        <label htmlFor="confirmationModal" onClick={() => setDeletedUser(user)}>
-                                                            <AiOutlineDelete className='cursor-pointer' />
-                                                        </label>
-                                                        <Link to={`/dashboard/user/edit/${ user._id }`}>
-                                                            <AiOutlineEdit className='cursor-pointer' />
-                                                        </Link>
+                                        {
+                                            tableColumnShow.sl === 'sl' &&
+                                            <td className="py-2 px-6 text-gray-900 text-sm">
+                                                <span>{ i + 1 }</span>
+                                            </td>
+                                        }
+                                        {
+                                            tableColumnShow.user === 'user' &&
+                                            <td className="py-2 px-6 text-theme-text text-sm ">
+                                                <div className="flex items-center">
+                                                    <div className="flex-shrink-0 h-10 w-10">
+                                                        <img src={user.image} alt={ user.name } className="w-full h-full rounded-full" />
+                                                    </div>
+                                                    <div className="ml-3">
+                                                        <p className="text-gray-900 whitespace-no-wrap">{ user.name }</p>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                                            </td>
+                                        }
+                                        {
+                                            tableColumnShow.email === 'email' &&
+                                            <td className="py-2 px-6 text-gray-900 text-sm">
+                                                <span>{ user.email }</span>
+                                            </td>
+                                        }
+                                        {
+                                            tableColumnShow.role === 'role' &&
+                                            <td className="py-2 px-6 text-gray-900 text-sm capitalize">
+                                                {
+                                                    user.role === 'admin' ?
+                                                    <span className='flex gap-2 items-center'>
+                                                        <img src={adminIcon} alt="" />
+                                                        { user.role }
+                                                    </span>
+                                                    : user.role === 'editor' ?
+                                                    <span className='flex gap-2 items-center'>
+                                                        <img src={editorIcon} alt="" />
+                                                        { user.role }
+                                                    </span>
+                                                    :
+                                                    <span className='flex gap-2 items-center'>
+                                                        <img src={authorIcon} alt="" />
+                                                        { user.role }
+                                                    </span>
+                                                }
+                                            </td>
+                                        }
+                                        {
+                                            tableColumnShow.plan === 'plan' &&
+                                            <td className={`py-2 px-6 text-gray-900 text-sm capitalize`}>
+                                                <span>{ user.plan }</span>
+                                            </td>
+                                        }
+                                        {
+                                            tableColumnShow.status === 'status' &&
+                                            <td className="py-2 px-6 text-gray-900 text-sm capitalize">
+                                                <span className={`${user.status === 'pending' ? 'bg-[#FDEDE1] text-[#FFB400]' : user.status === 'active' ? 'bg-[#EAF5EA] text-[#56CA00]' : 'bg-[#F1F1F2] text-[#8A8D93]'} py-1 px-[10px] rounded-2xl text-[13px] tracking-[0.16px]`}>{ user.status }</span>
+                                            </td>
+                                        }
+                                        {
+                                            tableColumnShow.action === 'action' &&
+                                            <td className="py-2 px-6 text-gray-900 text-sm">
+                                                <div className='dropdown dropdown-end'>
+                                                    <label tabIndex={0} className="cursor-pointer flex items-center">
+                                                        <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
+                                                    </label>
+                                                    <div tabIndex={0} className='dropdown-content p-4 shadow bg-base-100 rounded-box'>
+                                                        <div className='flex gap-3 text-2xl text-theme-primary'>
+                                                            <label htmlFor="confirmationModal" onClick={() => setDeletedUser(user)}>
+                                                                <AiOutlineDelete className='cursor-pointer' />
+                                                            </label>
+                                                            <Link to={`/dashboard/user/edit/${ user._id }`}>
+                                                                <AiOutlineEdit className='cursor-pointer' />
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        }
                                     </tr>
                                 ))
                             }

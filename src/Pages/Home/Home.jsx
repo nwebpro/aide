@@ -6,7 +6,6 @@ import TopHeader from './TopHeader';
 
 const Home = () => {
     const [addToCart, setAddToCart] = useState([])
-    const [btnHide, setBtnHide] = useState(true)
     const { data:products = [], isLoading } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
