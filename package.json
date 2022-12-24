@@ -21,6 +21,7 @@
     "react-table": "^7.8.0",
     "react-to-print": "^2.14.10",
     "react-toastify": "^9.1.1",
+    "swiper": "^8.4.5",
     "web-vitals": "^2.1.0",
     "xlsx": "^0.18.5"
   },

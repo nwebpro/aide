@@ -20,7 +20,7 @@ const Product = ({ product, handleAddToCart, addToCart }) => {
     }
 
     return (
-        <div key={product._id} className='bg-white p-5 hover:shadow-shadow transition duration-300 rounded'>
+        <div key={product._id} className='bg-white p-5 shadow-shadow transition duration-300 rounded'>
             <img src={product.image} alt={product.name} className='w-64 h-64 object-cover mb-5 mx-auto' />
             <div>
                 <h2 className='text-xl text-theme-text font-semibold mb-3'>{product.name}</h2>
