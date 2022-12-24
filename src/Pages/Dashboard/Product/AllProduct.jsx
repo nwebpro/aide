@@ -118,10 +118,10 @@ const AllProduct = () => {
                         <Link to='/dashboard/add/product' className='bg-theme-primary py-2 px-5 rounded shadow-btn-shadow text-white uppercase font-medium text-sm leading-6 tracking-[0.4px]'>Add Product</Link>
                     </div>
                 </div>
-                <div className="border-gray-200 w-full rounded bg-white">
+                <div className="border-gray-200 w-full rounded bg-white overflow-y-scroll no-scrollbar">
                     <table className="w-full leading-normal" ref={ productComponentRef }>
                         <thead className='border border-[#F9FAFC] border-b-0'>
-                            <tr>
+                            <tr className='sticky top-0 z-40'>
                                 {
                                     tableColumnShow.sl === 'sl' &&
                                     <th scope="col"

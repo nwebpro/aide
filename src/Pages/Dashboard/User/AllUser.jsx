@@ -121,7 +121,7 @@ const AllUser = () => {
                                     <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200   mr-2 cursor-pointer' onChange={tableColumnHandle} type="checkbox" name="status" value={tableColumnShow.status === "status" ? "" : "status"} defaultChecked={tableColumnShow.status === "status" ? true : false} />
                                     Status
                                 </label>
-                                <label htmlFor="action" className='flex items-center pl-5 py-1'>
+                                <label htmlFor="action" className='flex items-center pl-5  py-1'>
                                     <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200   mr-2 cursor-pointer' onChange={tableColumnHandle} type="checkbox" name="action" value={tableColumnShow.action === "action" ? "" : "action"} defaultChecked={tableColumnShow.action === "action" ? true : false} />
                                     Action
                                 </label>
@@ -132,10 +132,10 @@ const AllUser = () => {
                         <Link to='/dashboard/add/user' className='bg-theme-primary py-2 px-5 rounded shadow-btn-shadow text-white uppercase font-medium text-sm leading-6 tracking-[0.4px]'>Add User</Link>
                     </div>
                 </div>
-                <div className="border-gray-200 w-full rounded bg-white">
-                    <table className="w-full leading-normal" ref={ userComponentRef }>
+                <div className="border-gray-200 w-full rounded bg-white overflow-y-scroll no-scrollbar">
+                    <table className="w-full leading-normal border" ref={ userComponentRef }>
                         <thead className='border border-[#F9FAFC] border-b-0'>
-                            <tr>
+                            <tr className='sticky top-0 z-40'>
                                 {
                                     tableColumnShow.sl === 'sl' &&
                                     <th scope="col"

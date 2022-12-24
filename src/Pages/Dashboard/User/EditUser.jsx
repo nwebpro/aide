@@ -140,7 +140,7 @@ const EditUser = () => {
                         </div>
                     </div>
                     <div className="flex justify-end p-2">
-                        <Button classes={'py-3 px-5'} btnText={'Update User' } />
+                        <Button classes={'py-2 shadow-btn-shadow px-5'} btnText={'Update User' } />
                     </div>
                 </form>
             </div>
