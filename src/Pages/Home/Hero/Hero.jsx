@@ -8,9 +8,10 @@ import { Swiper, SwiperSlide } from "swiper/react"
 
 // Import Swiper styles
 import "swiper/css"
+import "swiper/css/effect-fade";
 import "swiper/css/pagination"
 // import required modules
-import { Autoplay, Pagination } from "swiper";
+import { EffectFade, Autoplay, Pagination } from "swiper";
 
 const sliderdata = [
     {
@@ -34,7 +35,8 @@ const Hero = () => {
     return (
         <section className='container mx-auto py-3'>
             <Swiper
-                spaceBetween={30}
+                spaceBetween={0}
+                effect={"fade"}
                 centeredSlides={true}
                 autoplay={{
                     delay: 3000,
@@ -45,7 +47,7 @@ const Hero = () => {
                 }}
                 speed={1000}
                 loop={true}
-                modules={[Autoplay, Pagination]}
+                modules={[EffectFade, Autoplay, Pagination]}
                 className="mySwiper"
             >
                 {

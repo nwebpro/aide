@@ -95,7 +95,7 @@ const AllUser = () => {
                             pageStyle='print'
                         />
                         <div className="dropdown dropdown-bottom mt-[6px]">
-                            <label tabIndex={0} className="cursor-pointer outline-none border rounded-lg py-[10px] items-center px-5 uppercase text-sm text-[#8A8D93]" onClick={tableColumnShowHideHandle}>Show/Hide Column</label>
+                            <label tabIndex={0} className="cursor-pointer outline-none border rounded-lg py-[10px] items-center px-5 uppercase text-sm text-[#8A8D93] hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary" onClick={tableColumnShowHideHandle}>Show/Hide Column</label>
                             <div tabIndex={0} className="dropdown-content menu shadow-shadow bg-base-100 w-52 mt-2">
                                 <label htmlFor="sl" className='flex items-center pl-5 border-b py-1'>
                                     <input className='form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-theme-primary checked:border-theme-primary focus:outline-none transition duration-200 mr-2 cursor-pointer' onClick={tableColumnHandle} type="checkbox" name="sl" value={tableColumnShow.sl === "sl" ? "" : "sl"} defaultChecked={tableColumnShow.sl === "sl" ? true : false} />
