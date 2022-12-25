@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useContext, useRef, useState } from 'react';
+import React, { createRef, useContext, useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { TbExternalLink } from 'react-icons/tb';
@@ -9,6 +9,14 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../../../Context/AuthProvider';
 import ConfirmationModal from '../../Shared/ConfirmationModal/ConfirmationModal';
 import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner';
+import Pdf from "react-to-pdf";
+
+const ref = createRef()
+const options = {
+    orientation: 'landscape',
+    unit: 'in',
+    format: [10,16]
+}
 
 const AllProduct = () => {
     const { handleExcelExport } = useContext(AuthContext)
@@ -21,7 +29,7 @@ const AllProduct = () => {
         price: "price",
         action: "action"
     })
-    const productComponentRef = useRef()
+
     const { data:products = [], isLoading, refetch } = useQuery({
         queryKey: ['products'],
         queryFn: async () => {
@@ -61,16 +69,20 @@ const AllProduct = () => {
         setTableColumnShow({ ...tableColumnShow, [data.target.name]: data.target.value })
     }
 
+
     return (
         <section>
-            <h2 className='text-[34px] leading-[42px] font-medium text-theme-primary mb-6'>All Products</h2>
             <div className='bg-white p-5 rounded'>
                 <div className='flex flex-wrap gap-5 md:flex-row justify-between items-center mb-5'>
                     <div className='flex gap-2 md:gap-6 flex-wrap'>
-                        <div className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
-                            <TbExternalLink />
-                            Pdf
-                        </div>
+                        <Pdf targetRef={ref} options={options} x={.5} y={.5} scale={1} filename="AllProducts.pdf">
+                            {({toPdf}) => (
+                                <div onClick={toPdf} className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
+                                    <TbExternalLink />
+                                    Pdf
+                                </div>
+                            )} 
+                        </Pdf>
                         <div onClick={() => handleExcelExport(allProducts, 'All Products', 'AllProducts.xlsx')} className='flex gap-3 border rounded-lg py-2 items-center px-5 uppercase text-sm text-[#8A8D93] cursor-pointer hover:bg-theme-primary hover:text-white transition-colors duration-300 hover:shadow-btn-shadow hover:border-theme-primary'>
                             <TbExternalLink />
                             Excel
@@ -84,8 +96,7 @@ const AllProduct = () => {
                                     </button>
                                 )
                             }}
-                            content={() => productComponentRef.current}
-                            documentTitle='All Products'
+                            content={() => ref.current}
                             pageStyle='print'
                         />
                         <div className="dropdown dropdown-bottom mt-[6px]">
@@ -118,104 +129,107 @@ const AllProduct = () => {
                         <Link to='/dashboard/add/product' className='bg-theme-primary py-2 px-5 rounded shadow-btn-shadow text-white uppercase font-medium text-sm leading-6 tracking-[0.4px]'>Add Product</Link>
                     </div>
                 </div>
-                <div className="border-gray-200 w-full rounded bg-white overflow-y-scroll no-scrollbar">
-                    <table className="w-full leading-normal" ref={ productComponentRef }>
-                        <thead className='border border-[#F9FAFC] border-b-0'>
-                            <tr className='sticky top-0 z-40'>
+                <div ref={ ref }>
+                    <h2 className='text-[34px] leading-[42px] font-medium text-theme-primary mb-6'>All Products</h2>
+                    <div className="border-gray-200 w-full rounded bg-white overflow-y-scroll no-scrollbar">
+                        <table className="w-full leading-normal">
+                            <thead className='border border-[#F9FAFC] border-b-0'>
+                                <tr className='sticky top-0 z-40'>
+                                    {
+                                        tableColumnShow.sl === 'sl' &&
+                                        <th scope="col"
+                                            className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                            Sl
+                                        </th>
+                                    }
+                                    {
+                                        tableColumnShow.image === 'image' &&
+                                        <th scope="col"
+                                            className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                            Image
+                                        </th>
+                                    }
+                                    {
+                                        tableColumnShow.name === 'name' &&
+                                        <th scope="col"
+                                            className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                            Name
+                                        </th>
+                                    }
+                                    {
+                                        tableColumnShow.price === 'price' &&
+                                        <th scope="col"
+                                            className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                            Price
+                                        </th>
+                                    }
+                                    {
+                                        tableColumnShow.action === 'action' &&
+                                        <th scope="col"
+                                            className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
+                                            Action
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody className='border border-gray-200'>
                                 {
-                                    tableColumnShow.sl === 'sl' &&
-                                    <th scope="col"
-                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                        Sl
-                                    </th>
-                                }
-                                {
-                                    tableColumnShow.image === 'image' &&
-                                    <th scope="col"
-                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                        Image
-                                    </th>
-                                }
-                                {
-                                    tableColumnShow.name === 'name' &&
-                                    <th scope="col"
-                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                        Name
-                                    </th>
-                                }
-                                {
-                                    tableColumnShow.price === 'price' &&
-                                    <th scope="col"
-                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                        Price
-                                    </th>
-                                }
-                                {
-                                    tableColumnShow.action === 'action' &&
-                                    <th scope="col"
-                                        className="text-theme-text py-[15px] px-5 bg-[#F9FAFC] text-left text-xs font-semibold uppercase tracking-[0.17px]">
-                                        Action
-                                    </th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody className='border border-gray-200'>
-                            {
-                                allProducts?.map((product, i) => (
-                                    <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200" key={i}>
-                                        {
-                                            tableColumnShow.sl === 'sl' &&
-                                            <td className="py-2 px-6 text-gray-900 text-sm">
-                                                <span>{ i + 1 }</span>
-                                            </td>
-                                        }
-                                        {
-                                            tableColumnShow.image === 'image' &&
-                                            <td className="py-2 px-6 text-theme-text text-sm">
-                                                <div className="flex items-center">
-                                                    <div className="flex-shrink-0 h-10 w-10">
-                                                        <img src={ product.image } alt={ product.name } className="w-full h-full rounded-full" />
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        }
-                                        {
-                                            tableColumnShow.name === 'name' &&
-                                            <td className="py-2 px-6 text-theme-text text-sm">
-                                                <span>{ product.name }</span>
-                                            </td>
-                                        }
-                                        {
-                                            tableColumnShow.price === 'price' &&
-                                            <td className={`py-2 px-6 text-theme-text text-sm capitalize`}>
-                                                <span>৳ { product.price }</span>
-                                            </td>
-                                        }
-                                        {
-                                            tableColumnShow.action === 'action' &&
-                                            <td className="py-2 px-6 text-theme-text text-sm">
-                                                <div className='dropdown dropdown-end'>
-                                                    <label tabIndex={0} className="cursor-pointer flex items-center">
-                                                        <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
-                                                    </label>
-                                                    <div tabIndex={0} className='dropdown-content p-4 shadow bg-base-100 rounded-box'>
-                                                        <div className='flex gap-3 text-2xl text-theme-primary'>
-                                                            <label htmlFor="confirmationModal" onClick={() => setDeletedProduct(product)}>
-                                                                <AiOutlineDelete className='cursor-pointer' />
-                                                            </label>
-                                                            <Link to={`/dashboard/product/edit/${ product._id }`}>
-                                                                <AiOutlineEdit className='cursor-pointer' />
-                                                            </Link>
+                                    allProducts?.map((product, i) => (
+                                        <tr className="hover:bg-gray-50 hover:cursor-pointer border-b border-gray-200" key={i}>
+                                            {
+                                                tableColumnShow.sl === 'sl' &&
+                                                <td className="py-2 px-6 text-gray-900 text-sm">
+                                                    <span>{ i + 1 }</span>
+                                                </td>
+                                            }
+                                            {
+                                                tableColumnShow.image === 'image' &&
+                                                <td className="py-2 px-6 text-theme-text text-sm">
+                                                    <div className="flex items-center">
+                                                        <div className="flex-shrink-0 h-10 w-10">
+                                                            <img src={ product.image } alt={ product.name } className="w-full h-full rounded-full" />
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        }
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
+                                                </td>
+                                            }
+                                            {
+                                                tableColumnShow.name === 'name' &&
+                                                <td className="py-2 px-6 text-theme-text text-sm">
+                                                    <span>{ product.name }</span>
+                                                </td>
+                                            }
+                                            {
+                                                tableColumnShow.price === 'price' &&
+                                                <td className={`py-2 px-6 text-theme-text text-sm capitalize`}>
+                                                    <span>৳ { product.price }</span>
+                                                </td>
+                                            }
+                                            {
+                                                tableColumnShow.action === 'action' &&
+                                                <td className="py-2 px-6 text-theme-text text-sm">
+                                                    <div className='dropdown dropdown-end'>
+                                                        <label tabIndex={0} className="cursor-pointer flex items-center">
+                                                            <BiDotsVerticalRounded className='text-[30px] text-theme-body' />
+                                                        </label>
+                                                        <div tabIndex={0} className='dropdown-content p-4 shadow bg-base-100 rounded-box'>
+                                                            <div className='flex gap-3 text-2xl text-theme-primary'>
+                                                                <label htmlFor="confirmationModal" onClick={() => setDeletedProduct(product)}>
+                                                                    <AiOutlineDelete className='cursor-pointer' />
+                                                                </label>
+                                                                <Link to={`/dashboard/product/edit/${ product._id }`}>
+                                                                    <AiOutlineEdit className='cursor-pointer' />
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            }
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             {

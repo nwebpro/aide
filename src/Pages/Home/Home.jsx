@@ -33,8 +33,6 @@ const Home = () => {
         }
         setAddToCart(newCart)
     }
-    
-
     return (
         <>
             <Hero />
